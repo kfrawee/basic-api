@@ -32,12 +32,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.str("SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = env.bool("DEBUG", False)
 
 ALLOWED_HOSTS = []
 
 
-SERVER_NAME = f"APP_{env.str('SERVER_NO')}"
+SERVER_NAME = f"APP_{env.str('SERVER_NO', "01")}"
 
 # Application definition
 
