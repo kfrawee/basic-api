@@ -36,7 +36,7 @@ DEBUG = env.bool("DEBUG", False)
 
 
 SERVER_NAME = f"APP_{env.str('SERVER_NO', '01')}"
-ALLOWED_HOSTS = env.list("MAIN_HOSTS", [])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", [])
 
 # Application definition
 
