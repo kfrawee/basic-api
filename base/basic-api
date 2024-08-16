@@ -1,35 +1,33 @@
 server {
     listen 80;
     server_name 34.45.174.16;
-
-    # Max upload size
-    client_max_body_size 50M;
-
-    # Timeouts
-    uwsgi_read_timeout 300;
-
-    location / {
-        include uwsgi_params;
-        uwsgi_pass 127.0.0.1:8000;
-        proxy_buffer_size 128k;
-        proxy_buffers 4 256k;
-        proxy_busy_buffers_size 256k;
-    }
+    charset utf-8;
+    client_max_body_size 10M;
+    access_log /var/log/nginx/basic-api-access.log;
+    error_log /var/log/nginx/basic-api-error.log;
+    server_tokens off;
 
     location /static/ {
         alias /home/ubuntu/basic-api/static/;
+        expires 1M;
+        add_header Cache-Control "public";
+        access_log off;
     }
 
-    location /media/ {
-        alias /home/ubuntu/basic-api/media/;
+    proxy_connect_timeout 75s;
+    proxy_read_timeout    300s;
+    proxy_send_timeout    300s;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Request-Id $request_id;
+        proxy_pass http://127.0.0.1:8000;
     }
 
-    # Error logging
-    error_log /var/log/nginx/basic-api_error.log;
-    access_log /var/log/nginx/basic-api_access.log;
+    location = /robots.txt {
+        add_header Content-Type text/plain;
+        return 200 "User-agent: *\nDisallow: /\n";
+    }
+
 }
-
-# Logging Settings
-log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-                 '$status $body_bytes_sent "$http_referer" '
-                 '"$http_user_agent" "$http_x_forwarded_for"';
