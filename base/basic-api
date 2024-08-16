@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name 34.45.174.16;
+
+    # Max upload size
+    client_max_body_size 50M;
+
+    # Timeouts
+    uwsgi_read_timeout 300;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:8000;
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+    }
+
+    location /static/ {
+        alias /home/ubuntu/basic-api/static/;
+    }
+
+    location /media/ {
+        alias /home/ubuntu/basic-api/media/;
+    }
+
+    # Error logging
+    error_log /var/log/nginx/basic-api_error.log;
+    access_log /var/log/nginx/basic-api_access.log;
+}
+
+# Logging Settings
+log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                 '$status $body_bytes_sent "$http_referer" '
+                 '"$http_user_agent" "$http_x_forwarded_for"';
