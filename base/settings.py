@@ -34,12 +34,9 @@ SECRET_KEY = env.str("SECRET_KEY", "")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)
 
-ALLOWED_HOSTS = [
-    'localhost',
-]
-
 
 SERVER_NAME = f"APP_{env.str('SERVER_NO', '01')}"
+ALLOWED_HOSTS = env.list("MAIN_HOSTS", [])
 
 # Application definition
 
